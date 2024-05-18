@@ -2,7 +2,7 @@
 const MenuItemCard = ({ item }) => {
     const { name, recipe, image, price } = item || {};
     return (
-        <div className="flex gap-7 justify-around">
+        <div className="flex flex-col md:flex-row gap-7  md:justify-around shadow-md p-2">
             <img style={{
                 borderRadius: "0px 200px 200px 200px",
                 background: "#D9D9D9",
