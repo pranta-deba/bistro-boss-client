@@ -19,7 +19,6 @@ const Shop = () => {
 
     const categories = ["salad", "pizza", "soups", "desserts", "drinks"];
     const initialIndex = categories.indexOf(category);
-    console.log(initialIndex);
     const [tabIndex, setTabIndex] = useState(initialIndex == -1 ? 0 : initialIndex);
 
     return (
