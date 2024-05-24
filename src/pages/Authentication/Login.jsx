@@ -8,9 +8,11 @@ import { FaGoogle } from "react-icons/fa";
 import { FaGithub } from "react-icons/fa6";
 import { Helmet } from "react-helmet-async";
 import { AuthContext } from "../../provider/AuthProvider";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Login = () => {
     const { googleLogin, loginUser } = useContext(AuthContext);
+    const axiosPublic = useAxiosPublic();
     const navigate = useNavigate();
     const from = '/';
     useEffect(() => {
@@ -34,11 +36,16 @@ const Login = () => {
             console.log(error.message);
         }
     }
-    const handleGoogleLogin = () => {
+    const handleGoogleLogin = async () => {
         googleLogin()
-            .then(() => {
-                toast.success('Login Successfully!');
-                navigate(from);
+            .then((res) => {
+                axiosPublic.post('/users', {
+                    name: res.user?.displayName,
+                    email: res.user?.email
+                }).then(() => {
+                    toast.success('Sign up Successfully!');
+                    navigate(from);
+                })
             }).catch(() => {
                 toast.error('Login Failed.! please try again!');
             })

@@ -10,11 +10,13 @@ import { useContext, useRef } from "react";
 import axios from 'axios';
 import { AuthContext } from "../../provider/AuthProvider";
 import toast from "react-hot-toast";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Register = () => {
-    const { updateUser, createUser } = useContext(AuthContext);
+    const { updateUser, createUser, googleLogin } = useContext(AuthContext);
     const imageRef = useRef();
     const navigate = useNavigate();
+    const axiosPublic = useAxiosPublic();
     const from = '/';
     const {
         register,
@@ -32,20 +34,40 @@ const Register = () => {
 
         try {
             const { data } = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_imgbb}`, formData)
-            console.log(data.data.display_url);
+            // console.log(data.data.display_url);
 
             const create = await createUser(email, password);
             console.log(create);
 
             await updateUser(name, data.data.display_url)
-            toast.success('Sign up Successfully!');
-            navigate(from);
+
+            const { data: userInsertRes } = await axiosPublic.post('/users', {
+                name,
+                email
+            });
+            if (userInsertRes.insertedId) {
+                toast.success('Sign up Successfully!');
+                navigate(from);
+            }
 
         } catch (error) {
             console.log(error.message);
         }
     }
-    //
+    const handleGoogleLogin = async () => {
+        googleLogin()
+            .then((res) => {
+                axiosPublic.post('/users', {
+                    name: res.user?.displayName,
+                    email: res.user?.email
+                }).then(() => {
+                    toast.success('Sign up Successfully!');
+                    navigate(from);
+                })
+            }).catch(() => {
+                toast.error('Login Failed.! please try again!');
+            })
+    }
     return (
         <div style={{
             backgroundImage: `url("${bg}")`
@@ -91,7 +113,7 @@ const Register = () => {
                         <h1 className="text-[#D1A054]">Already registered? <Link to={"/login"} className="font-bold">Go to log in</Link></h1>
                         <p>Or sign in with</p>
                         <div className="flex justify-center items-center gap-3 mt-2">
-                            <button className="p-2 border border-black rounded-full"><FaGoogle size={20} /></button>
+                            <button onClick={handleGoogleLogin} className="p-2 border border-black rounded-full"><FaGoogle size={20} /></button>
                             <button className="p-2 border border-black rounded-full"><FaGithub size={20} /></button>
                         </div>
                     </div>
