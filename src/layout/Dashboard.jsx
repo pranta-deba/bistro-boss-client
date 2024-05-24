@@ -4,16 +4,24 @@ import { IoMdMenu } from "react-icons/io";
 import { FaShoppingCart } from "react-icons/fa";
 import { MdContacts } from "react-icons/md";
 import { FaListCheck, FaUsersGear } from "react-icons/fa6";
+import useAdmin from "../hooks/useAdmin";
+import { RiMenuFoldFill } from "react-icons/ri";
 
 const Dashboard = () => {
-    const isAdmin = true;
+    const [isAdmin, isAdminLoading] = useAdmin();
+    if (isAdminLoading) {
+        return <div className="h-screen flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
+        </div>
+    }
+
     return (
         <div className="flex">
             <div>
                 <div className="drawer z-10 md:hidden">
                     <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-                    <div className="drawer-content">
-                        <label htmlFor="my-drawer" className="btn btn-primary drawer-button">Open drawer</label>
+                    <div className="drawer-content absolute top-1 left-1">
+                        <label htmlFor="my-drawer" className="btn bg-[#D1A054] drawer-button"><RiMenuFoldFill size={30} /></label>
                     </div>
                     <div className="drawer-side">
                         <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
