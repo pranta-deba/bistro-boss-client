@@ -2,6 +2,7 @@ import toast from "react-hot-toast";
 import SectionTitle from "../../../components/SectionTitle";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useCart from "../../../hooks/useCart";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
     const axiosSecure = useAxiosSecure()
@@ -26,7 +27,10 @@ const Cart = () => {
             <div className="flex flex-col md:flex-row justify-around gap-4">
                 <h1 className="text-3xl font-bold cinzelFont">Total orders: {cart.length}</h1>
                 <h1 className="text-3xl font-bold cinzelFont">total price: ${totalPrice}</h1>
-                <button className="btn bg-[#D1A054]">Pay</button>
+                <button disabled={!cart.length} className="btn bg-[#D1A054]">
+                    <Link to={"/dashboard/payment"}>Pay</Link>
+                </button>
+
             </div>
             <div>
                 <div className="overflow-auto">

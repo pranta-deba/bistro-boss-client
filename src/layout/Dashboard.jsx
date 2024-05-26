@@ -6,9 +6,11 @@ import { MdContacts } from "react-icons/md";
 import { FaListCheck, FaUsersGear } from "react-icons/fa6";
 import useAdmin from "../hooks/useAdmin";
 import { RiMenuFoldFill } from "react-icons/ri";
+import useCart from "../hooks/useCart";
 
 const Dashboard = () => {
     const [isAdmin, isAdminLoading] = useAdmin();
+    const [cart] = useCart();
     if (isAdminLoading) {
         return <div className="h-screen flex items-center justify-center">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
@@ -161,7 +163,7 @@ const Dashboard = () => {
                                     <li>
                                         <Link to="/dashboard/cart" className={"text-xl font-bold cinzelFont flex items-center gap-1"}>
                                             <FaCartPlus />
-                                            my cart</Link>
+                                            my cart ({cart.length})</Link>
                                     </li>
                                     <li>
                                         <Link to="/dashboard/review" className={"text-xl font-bold cinzelFont flex items-center gap-1"}>
