@@ -156,7 +156,7 @@ const Dashboard = () => {
                                             reservation</Link>
                                     </li>
                                     <li>
-                                        <Link to="/dashboard/payment" className={"text-xl font-bold cinzelFont flex items-center gap-1"}>
+                                        <Link to="/dashboard/payment_history" className={"text-xl font-bold cinzelFont flex items-center gap-1"}>
                                             <FaAmazonPay />
                                             payment history</Link>
                                     </li>

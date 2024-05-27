@@ -5,6 +5,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useCart from "../../../hooks/useCart";
 import { useContext } from "react";
 import { AuthContext } from "../../../provider/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const CheckOutFrom = () => {
     const { user } = useContext(AuthContext);
@@ -13,13 +14,16 @@ const CheckOutFrom = () => {
     const axiosSecure = useAxiosSecure();
     const [clientSecret, setClientSecret] = useState("");
     const [cart, refetch] = useCart();
+    const navigate = useNavigate();
     const totalPrice = cart.reduce((p, c) => p + c.price, 0);
 
     useEffect(() => {
-        axiosSecure.post('/create-payment-intent', { price: totalPrice })
-            .then(res => {
-                setClientSecret(res.data.clientSecret);
-            })
+        if (totalPrice > 0) {
+            axiosSecure.post('/create-payment-intent', { price: totalPrice })
+                .then(res => {
+                    setClientSecret(res.data.clientSecret);
+                })
+        }
     }, [axiosSecure, totalPrice]);
 
 
@@ -72,6 +76,7 @@ const CheckOutFrom = () => {
                 console.log(data);
                 refetch();
                 toast.success("payment success");
+                navigate('/dashboard/payment_history')
             }
         }
     }
